@@ -16,12 +16,12 @@ import openai
 import numpy as np
 from openai.embeddings_utils import distances_from_embeddings, cosine_similarity
 from ast import literal_eval
-
+from config import OPENAI_API_KEY
 # Regex pattern to match a URL
 HTTP_URL_PATTERN = r'^http[s]{0,1}://.+$'
 
 # Define OpenAI api_key
-# openai.api_key = '<Your API Key>'
+openai.api_key = OPENAI_API_KEY
 
 # Define root domain to crawl
 domain = "openai.com"
@@ -166,7 +166,7 @@ def crawl(url):
                 queue.append(link)
                 seen.add(link)
 
-crawl(full_url)
+# crawl(full_url)
 
 ################################################################################
 ### Step 5
@@ -351,7 +351,7 @@ def create_context(
 
 def answer_question(
     df,
-    model="text-davinci-003",
+    model="gpt-3.5-turbo-instruct",
     question="Am I allowed to publish model outputs to Twitter, without a human review?",
     max_len=1800,
     size="ada",
