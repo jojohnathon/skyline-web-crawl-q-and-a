@@ -24,8 +24,8 @@ HTTP_URL_PATTERN = r'^http[s]{0,1}://.+$'
 openai.api_key = OPENAI_API_KEY
 
 # Define root domain to crawl
-domain = "openai.com"
-full_url = "https://openai.com/"
+domain = "skylinecollege.edu"
+full_url = "https://skylinecollege.edu/"
 
 # Create a class to parse the HTML and get the hyperlinks
 class HyperlinkParser(HTMLParser):
@@ -141,6 +141,7 @@ def crawl(url):
         print(url) # for debugging and to see the progress
         
         # Try extracting the text from the link, if failed proceed with the next item in the queue
+        #TODO: remove header text
         try:
             # Save text from the url to a <url>.txt file
             with open('text/'+local_domain+'/'+url[8:].replace("/", "_") + ".txt", "w", encoding="UTF-8") as f:
@@ -176,7 +177,7 @@ def remove_newlines(serie):
     serie = serie.str.replace('\n', ' ')
     serie = serie.str.replace('\\n', ' ')
     serie = serie.str.replace('  ', ' ')
-    serie = serie.str.replace('  ', ' ')
+    # serie = serie.str.replace('  ', ' ')
     return serie
 
 
@@ -190,12 +191,15 @@ texts=[]
 # Get all the text files in the text directory
 for file in os.listdir("text/" + domain + "/"):
 
+    #TODO: filter pdf name
+    if ("pdf" not in file and "png" not in file and "m4a" not in file and "pptx" not in file): 
     # Open the file and read the text
-    with open("text/" + domain + "/" + file, "r", encoding="UTF-8") as f:
-        text = f.read()
+        with open("text/" + domain + "/" + file, "r", encoding="UTF-8") as f:
+            text = f.read()
 
-        # Omit the first 11 lines and the last 4 lines, then replace -, _, and #update with spaces.
-        texts.append((file[11:-4].replace('-',' ').replace('_', ' ').replace('#update',''), text))
+            print(file)
+            # Omit the first 11 lines and the last 4 lines, then replace -, _, and #update with spaces.
+            texts.append((file[11:-4].replace('-',' ').replace('_', ' ').replace('#update',''), text))
 
 # Create a dataframe from the list of texts
 df = pd.DataFrame(texts, columns = ['fname', 'text'])
